@@ -9,19 +9,19 @@ fin = open('databases/city.list.json', 'r')
 db = json.load(fin)
 fin.close()
 
-def get_code(search):
+def get_code(search):                                  # For getting city id.
     search = "".join(re.sub(r' +', ' ', search))
     search = search.strip().title()
     for places in db:
         if places['name'] == search:
             return places['id']
 
-def parse_city_id(city_id):
+def parse_city_id(city_id):                            # Getting city name from the db.
     for cities in db:
         if cities['id'] == city_id:
             return cities['name']
 
-def print_data(dates):
+def print_data(dates):                                 # Output format for the data.
     print('Time       :',dates['dt_txt'][-8:-1])
     print('Temp max   :',"{0:.2f}".format(dates['main']['temp_max']-273.15),'Celcius')
     print('Temp min   :',"{0:.2f}".format(dates['main']['temp_min']-273.15),'Celcius')
