@@ -2,9 +2,11 @@
 ''' Main program. '''
 
 import dbman
+import menuman
 import requests
 import json
 import datetime
+import re
 
 class weather:
     def __init__(self):
@@ -18,7 +20,7 @@ class weather:
         weather_data = json.loads(response.content)['list']
         return weather_data
     
-    def pick_data(self):
+    def pick_data(self, date_string):
         pass
 
     def change_city(self):
@@ -27,6 +29,7 @@ class weather:
         if temp_id:
             self.city_id = temp_id
             self.selected_city = dbman.parse_city_id(self.city_id)
+            self.weather_data = self.get_data(self.city_id)
             main_menu()
             
         else:
@@ -37,34 +40,101 @@ class weather:
         # print(json.dumps(self.weather_data, indent=4))
         for dates in self.weather_data:
             if dates['dt_txt'].startswith(str(self.today)):
-                print(dates['weather'])
-    
+                dbman.print_data(dates)
+
+    def advanced_search(self):
+        self.today = datetime.date.today()
+        days, hours = input(f'{menuman.days}>>> '), input(f'{menuman.hours}>>> ')
+
+        if days == '1':
+            self.today = self.today + datetime.timedelta(days=1)
+        elif days == '2':
+            self.today = self.today + datetime.timedelta(days=2)
+        elif days == '3':
+            self.today = self.today + datetime.timedelta(days=3)
+        elif days == '4':
+            self.today = self.today + datetime.timedelta(days=4)
+        elif days == '5':
+            print("Logged out")
+        else:
+            print('Invalid option. Try again.')
+            self.advanced_search()
+
+        hours1 =  re.sub(r'[^\d]', '', hours)
+        x = len(hours)
+        y = int(hours)
+        if hours1 != hours:
+            print('\nPlease only enter numbers. Try again')
+            self.advanced_search()
+
+        if x>0 and x<3 and y==24 and int(days)==4:
+            print('Search parameter exceeds 5 days. Try again')
+            self.advanced_search()
+        elif x>0 and x<3 and y==24 and int(days)!=4:
+            self.today = self.today + datetime.timedelta(days=1)
+            print(self.today)
+        elif x>0 and x<3 and y>=0 and y<24:
+            self.selected_hour = y
+        else:
+            print('Our planet uses 24 hour clock.\nMr Alien, please enter an hour according to our clocks.')
+            self.advanced_search()
+
+        for dates in self.weather_data:
+            x = self.selected_hour - int(dates['dt_txt'].split(" ")[1].split(":")[0])
+            y = int(dates['dt_txt'].split(" ")[1].split(":")[0])
+            if dates['dt_txt'].startswith(str(self.today)) and x == 0:
+                print('\nSelected hour is in this time window:')
+                dbman.print_data(dates)
+                break
+            elif dates['dt_txt'].startswith(str(self.today)) and x < 3 and x > 0:
+                print('\nSelected hour is in this time window:')
+                dbman.print_data(dates)
+                break
+            elif dates['dt_txt'].startswith(str(self.today)) and y >= 21:
+                print('\nSelected hour is in this time window:')
+                dbman.print_data(dates)
+        advanced_input = input(menuman.advanced_input)
+        if advanced_input == '1':
+            main_menu()
+        elif advanced_input == '2':
+            print('\nLogged out.')
+        else:
+            print('\nInvalid input. Returning to main menu.\n')
+            main_menu()
+                
 
 def main_menu():
-    print(f'''\nCurrent city: {vacation.selected_city} \n
-What do you want to do? \n1. Change city. \n2. Display overview (Today).\n3. Quit.''')
+    print(f'''\n###########################\nCurrent city: {vacation.selected_city} \n
+What do you want to do? \n1. Change city. \n2. Display overview (Today).\n3. Advanced Search.\n4. Quit.''')
     main_input = input(">> ")
     
     if main_input == '1':
         vacation.change_city()
 
     elif main_input == '2':
-        vacation.overview()
+        overview_menu()
 
-    elif main_input in ['3', 'q', 'Q', 'Quit', 'quit']:
+    elif main_input == '3':
+        vacation.advanced_search()
+
+    elif main_input in ['4', 'q', 'Q', 'Quit', 'quit']:
         print('Logged out')
 
     else:
         print("invalid input. Try again.")
         main_menu()
 
-
-
-
+def overview_menu():
+    print(f'\nToday\'s weather overview of {vacation.selected_city}.\n')
+    vacation.overview()
+    overview_input = input("1. Go Back.\n2. Quit\n>> ")
+    if overview_input == '1':
+        main_menu()
+    elif overview_input in ['2', 'q', 'Q', 'Quit', 'quit']:
+        print("Logged out")
+    else:
+        overview_menu()
 
 if __name__ == "__main__":
     vacation = weather() 
     main_menu()
-    # vacation = weather()
-    # print(get_code(vacation.search))
-    # print(json.dumps(vacation.weather_data))

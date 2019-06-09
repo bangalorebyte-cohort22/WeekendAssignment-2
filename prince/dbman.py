@@ -21,11 +21,18 @@ def parse_city_id(city_id):
         if cities['id'] == city_id:
             return cities['name']
 
+def print_data(dates):
+    print('Time       :',dates['dt_txt'][-8:-1])
+    print('Temp max   :',"{0:.2f}".format(dates['main']['temp_max']-273.15),'Celcius')
+    print('Temp min   :',"{0:.2f}".format(dates['main']['temp_min']-273.15),'Celcius')
+    print('Windspeed  :',dates['wind']['speed'],'mph')
+    print('Humidity   :',dates['main']['humidity'],'%')
+    print('Cloudiness :',dates['weather'][0]['description'])
+    print('\n')
+
 
 if __name__ == "__main__":
-    # search = input("Enter a city name:")
-    response = get_code(input("Enter city name: "))
-    
+    response = get_code(input("Enter city name: "))    
     if response:
         print("\nCity code is:",response)
     else:
