@@ -17,3 +17,5 @@ Please enter the hour in 24hr format:
 advanced_input = '''1. Go back.
 2. Quit.
 '''
+if __name__ == "__main__":
+    print("This file just contains the menu texts.")
