@@ -3,6 +3,7 @@
 days = '''
 Select the day you want to view the forecast for:
 
+0. Today
 1. Tomorrow
 2. Two days from now
 3. Three days from now

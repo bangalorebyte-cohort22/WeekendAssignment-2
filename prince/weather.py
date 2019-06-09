@@ -51,7 +51,9 @@ class weather:
         self.today = datetime.date.today()
         days, hours = input(f'{menuman.days}>>> '), input(f'{menuman.hours}>>> ')
 
-        if days == '1':
+        if days == '0':
+            pass
+        elif days == '1':
             self.today = self.today + datetime.timedelta(days=1)
         elif days == '2':
             self.today = self.today + datetime.timedelta(days=2)
