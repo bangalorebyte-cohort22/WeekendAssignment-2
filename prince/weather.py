@@ -7,6 +7,7 @@ import requests
 import json
 import datetime
 import re
+import os
 
 class weather:
     def __init__(self):
@@ -49,7 +50,7 @@ class weather:
     def advanced_search(self):
         # The advanced search function.
         self.today = datetime.date.today()
-        days, hours = input(f'{menuman.days}>>> '), input(f'{menuman.hours}>>> ')
+        days= input(f'{menuman.days}>>> ')
 
         if days == '0':
             pass
@@ -63,10 +64,12 @@ class weather:
             self.today = self.today + datetime.timedelta(days=4)
         elif days == '5':
             print("Logged out")
+            os._exit(0)
         else:
             print('Invalid option. Try again.')
             self.advanced_search()
-
+        
+        hours = input(f'{menuman.hours}>>> ')
         # For filtering out non digit characters
         hours1 =  re.sub(r'[^\d]', '', hours)
         x = len(hours)
@@ -114,6 +117,7 @@ class weather:
             main_menu()
         elif advanced_input == '2':
             print('\nLogged out.')
+            os._exit(0)
         else:
             print('\nInvalid input. Returning to main menu.\n')
             main_menu()
@@ -135,6 +139,7 @@ What do you want to do? \n1. Change city. \n2. Display overview (Today).\n3. Adv
 
     elif main_input in ['4', 'q', 'Q', 'Quit', 'quit']:
         print('Logged out')
+        os._exit(0)
 
     else:
         print("invalid input. Try again.")
@@ -147,6 +152,7 @@ def overview_menu():
         main_menu()
     elif overview_input in ['2', 'q', 'Q', 'Quit', 'quit']:
         print("Logged out")
+        os._exit(0)
     else:
         overview_menu()
 
