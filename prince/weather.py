@@ -90,7 +90,7 @@ class weather:
 
 
         # Printing out data for valid queries.
-        for dates in self.weather_data:
+        for i, dates in enumerate(self.weather_data):
             x = self.selected_hour - int(dates['dt_txt'].split(" ")[1].split(":")[0])
             y = int(dates['dt_txt'].split(" ")[1].split(":")[0])
             if dates['dt_txt'].startswith(str(self.today)) and x == 0:
@@ -101,12 +101,12 @@ class weather:
                 print('###########################\nSelected hour is in this time window:')
                 dbman.print_data(dates)
                 break
-            elif dates['dt_txt'].startswith(str(self.today)) and y >= 21:
+            elif dates['dt_txt'].startswith(str(self.today)) and y >= 21 and x <4:
                 print('###########################\nSelected hour is in this time window:')
                 dbman.print_data(dates)
-            else:
-                print('###########################\nSelected hour is is already passed.\nTry again.')
-                self.advanced_search()
+            # elif dates['dt_txt'].startswith(str(self.today)) and i == len(self.weather_data):
+            #     print('###########################\nSelected hour is is already passed.\nTry again.')
+            #     self.advanced_search()
         
         # Return option.
         advanced_input = input(menuman.advanced_input)
