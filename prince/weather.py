@@ -104,6 +104,9 @@ class weather:
             elif dates['dt_txt'].startswith(str(self.today)) and y >= 21:
                 print('###########################\nSelected hour is in this time window:')
                 dbman.print_data(dates)
+            else:
+                print('###########################\nSelected hour is is already passed.\nTry again.')
+                self.advanced_search()
         
         # Return option.
         advanced_input = input(menuman.advanced_input)
