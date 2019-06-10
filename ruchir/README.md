@@ -1,0 +1,3 @@
+# README
+
+- Using the OpenWeatherAPI
