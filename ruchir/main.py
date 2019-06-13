@@ -6,6 +6,7 @@ import pyfiglet
 from datetime import datetime
 import time
 import sys
+from terminaltables import AsciiTable
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 os.chdir(THIS_FOLDER)
@@ -18,45 +19,42 @@ api_key_3 = "1534719b67a41207d1af8b8c0fbde0d7"
 def main_info(*args, **kwargs):
     url = "http://api.openweathermap.org/data/2.5/weather?q=" + initial_menu.city + "&appid=" + api_key_2 + "&units=metric"
     df = pd.DataFrame([requests.get(url).json()])
-    df = df.reindex(['main'], axis=1)
-    df = df.main.apply(pd.Series)
-    tmin = df.iloc[0]['temp_min']
-    tmax = df.iloc[0]['temp_max']
-    humid = df.iloc[0]['humidity']
-    main_info.humid_ = [humid]
-
-    pressure = df.iloc[0]['pressure']
-    avg_temp = df.iloc[0]['temp']
-
-    main_info.tmin = tmin
-    main_info.tmax = tmax
-    main_info.pressure = pressure
-    main_info.avg_temp = avg_temp
-
-
-def avg_temp():
-    print("Average Temp.: " + str(main_info.avg_temp))
-
-
-def minmax():
-    print(main_info.tmin, main_info.tmax)
-
-
-def max_temp():
-    print(main_info.tmax)
-
-
-def misc_data():
-    pass
-
-
-def pressure():
-    print(main_info.pressure)
-
-
-def humid():
-
-    print(main_info.humid_[0])
+    query = "city not found"
+    # if query in df:
+    #     print("City name does not exist. Please try again.")
+    try:
+        df = df.reindex(['main'], axis=1)
+        df = df.main.apply(pd.Series)
+        tmin = df.iloc[0]['temp_min']
+        tmax = df.iloc[0]['temp_max']
+        humid = df.iloc[0]['humidity']
+        pressure = df.iloc[0]['pressure']
+        avg_temp = df.iloc[0]['temp']
+        wind = df.iloc[0]['wind']
+        
+        df = df.coord.apply(pd.Series)
+        longitude = df.iloc[0]['coord']
+        latitude - df.iloc[0]['coord']
+        
+        df = df.weather.apply(pd.Series)
+        main_weather = df.iloc[0]['Main']
+    except:
+        print("City name does not exist. Please try again.")
+        initial_menu()
+    
+    title = initial_menu.city.capitalize()+"'s Weather"
+    
+    weather_data = [
+        []
+    ]
+    
+    table_data = [
+        ["City","Min", "Max","Humidity", "Pressure", 'Avg. Temp.'],
+        [initial_menu.city.capitalize(), tmin, tmax, humid, pressure, avg_temp]
+    ]
+    
+    table = AsciiTable(table_data, title)
+    print (table.table)
 
 
 def quit():
@@ -70,51 +68,69 @@ def initial_menu():
         try:
             city = input("Enter city name: ")
             initial_menu.city = city
-            main_info()
+            # main_info()
             time.sleep(1)
-            main_menu()
+            change_city()
 
         except ValueError:
             print("Oops! Something went wrong. Please try again.")
+            
+#//TODO: Include ability to search by zip code as well
+#//TODO: Ask for country name as well
+#//TODO: Map country codes to country name
+#// TODO: Connect the Quit option
+#//TODO: Have the option of changing to imperial
+#//TODO: Download and parse that JSON with Pandas and look with a loop if the city & country the user entered is in the weather API list
 
-
-def main_menu():
+def change_city():
     os.system("clear")
-    heading = pyfiglet.figlet_format(initial_menu.city)
+    heading = pyfiglet.figlet_format(initial_menu.city.capitalize())
     print(heading)
+    main_info()
+    print('''
+          [1] Change City
+          [2] Quit''')
+    
+    input_ = input("[Enter]: ")
+    if input_ == '1':
+         initial_menu()
+    elif input_ == '2':
+        sys.exit()
+    # elif input_ = 
+         
 
-    while True:
-        try:
+    # while True:
+    #     try:
 
-            print('''
-                      [1] -- > Find the Average Temperatures
-                      [2] -- > Find the Minimum & Temperatures
-                      [3] -- > Find Atmospheric Pressure
-                      [4] -- > Find Humidity
-                      [5] -- > Change City
-                      [6] -- > Quit''')
+    #         print('''
+    #                   [1] -- > Find the Average Temperatures
+    #                   [2] -- > Find the Minimum & Temperatures
+    #                   [3] -- > Find Atmospheric Pressure
+    #                   [4] -- > Find Humidity
+    #                   [5] -- > Change City
+    #                   [6] -- > Quit''')
 
-            choice = int(input("[Enter]: "))
+    #         choice = int(input("[Enter]: "))
 
-            #maps the options to their respective function
-            menu_funcs = {
-                1: avg_temp,
-                2: minmax,
-                3: pressure,
-                4: humid,
-                5: initial_menu,
-                6: quit
-            }
-            if choice in menu_funcs:
-                menu_funcs[choice]()  #calls the function
+    #         #maps the options to their respective function
+    #         menu_funcs = {
+    #             1: avg_temp,
+    #             2: minmax,
+    #             3: pressure,
+    #             4: humid,
+    #             5: initial_menu,
+    #             6: quit
+    #         }
+    #         if choice in menu_funcs:
+    #             menu_funcs[choice]()  #calls the function
 
-            else:
-                print("Command not recognized. ")
+    #         else:
+    #             print("Command not recognized. ")
 
-        except ValueError:
-            print("Please enter a number. ")
+    #     except ValueError:
+    #         print("Please enter a number. ")
 
 
 if __name__ == '__main__':
     initial_menu()
-    main_info()
+    # main_info()
