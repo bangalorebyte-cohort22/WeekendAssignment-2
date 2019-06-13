@@ -7,6 +7,7 @@ import requests
 import json
 import datetime
 import re
+import os
 
 class weather:
     def __init__(self):
@@ -49,7 +50,7 @@ class weather:
     def advanced_search(self):
         # The advanced search function.
         self.today = datetime.date.today()
-        days, hours = input(f'{menuman.days}>>> '), input(f'{menuman.hours}>>> ')
+        days= input(f'{menuman.days}>>> ')
 
         if days == '0':
             pass
@@ -63,10 +64,12 @@ class weather:
             self.today = self.today + datetime.timedelta(days=4)
         elif days == '5':
             print("Logged out")
+            os._exit(0)
         else:
             print('Invalid option. Try again.')
             self.advanced_search()
-
+        
+        hours = input(f'{menuman.hours}>>> ')
         # For filtering out non digit characters
         hours1 =  re.sub(r'[^\d]', '', hours)
         x = len(hours)
@@ -90,7 +93,7 @@ class weather:
 
 
         # Printing out data for valid queries.
-        for dates in self.weather_data:
+        for i, dates in enumerate(self.weather_data):
             x = self.selected_hour - int(dates['dt_txt'].split(" ")[1].split(":")[0])
             y = int(dates['dt_txt'].split(" ")[1].split(":")[0])
             if dates['dt_txt'].startswith(str(self.today)) and x == 0:
@@ -101,9 +104,12 @@ class weather:
                 print('###########################\nSelected hour is in this time window:')
                 dbman.print_data(dates)
                 break
-            elif dates['dt_txt'].startswith(str(self.today)) and y >= 21:
+            elif dates['dt_txt'].startswith(str(self.today)) and y >= 21 and x <4:
                 print('###########################\nSelected hour is in this time window:')
                 dbman.print_data(dates)
+            # elif dates['dt_txt'].startswith(str(self.today)) and i == len(self.weather_data):
+            #     print('###########################\nSelected hour is is already passed.\nTry again.')
+            #     self.advanced_search()
         
         # Return option.
         advanced_input = input(menuman.advanced_input)
@@ -111,6 +117,7 @@ class weather:
             main_menu()
         elif advanced_input == '2':
             print('\nLogged out.')
+            os._exit(0)
         else:
             print('\nInvalid input. Returning to main menu.\n')
             main_menu()
@@ -132,6 +139,7 @@ What do you want to do? \n1. Change city. \n2. Display overview (Today).\n3. Adv
 
     elif main_input in ['4', 'q', 'Q', 'Quit', 'quit']:
         print('Logged out')
+        os._exit(0)
 
     else:
         print("invalid input. Try again.")
@@ -144,6 +152,7 @@ def overview_menu():
         main_menu()
     elif overview_input in ['2', 'q', 'Q', 'Quit', 'quit']:
         print("Logged out")
+        os._exit(0)
     else:
         overview_menu()
 
