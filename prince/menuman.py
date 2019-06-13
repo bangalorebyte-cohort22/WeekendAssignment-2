@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
+''' Contains user menu contents '''
 
-days = '''
+DAYS = '''
 Select the day you want to view the forecast for:
 
 0. Today
@@ -11,11 +12,11 @@ Select the day you want to view the forecast for:
 5. Quit
 '''
 
-hours = '''
+HOURS = '''
 Please enter the hour in 24hr format:
 '''
 
-advanced_input = '''1. Go back.
+ADVANCED_INPUT = '''1. Go back.
 2. Quit.
 '''
 if __name__ == "__main__":
