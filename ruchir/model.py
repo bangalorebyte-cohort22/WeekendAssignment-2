@@ -1,5 +1,6 @@
 from os import path
 from os import chdir
+from pandas.io.json import json_normalize
 
 THIS_FOLDER = path.dirname(path.abspath(__file__))
 chdir(THIS_FOLDER)
@@ -23,6 +24,21 @@ def getWeatherZip(zipCode, countryID)
 # If country is not specified then the search works for USA, by default
     url = f"http://api.openweathermap.org/data/2.5/weather?zip="{zipCode}","{countryID}"&appid="{api_key_3}"&units="{units}
     
-def getForecast()
-    url = f"api.openweathermap.org/data/2.5/forecast?q={city name},{country code}"
+def getForecast(city, countryID)
+    url = f"http://api.openweathermap.org/data/2.5/forecast?q={city},{countryID}"
+
+def getForecastZip(zipCode, countryID):
+    url = f"http://api.openweathermap.org/data/2.5/forecast?zip={zipCode},{countryID}"
+    
+def getHourlyForecast(city, countryID):
+    url = f"http://api.openweathermap.org/data/2.5/forecast/hourly?q={city},{countryID}"
+
+    pass
+
+def get16DayForecast(city, countryID)
+    url = f"api.openweathermap.org/data/2.5/forecast/daily?id={city}&cnt={cnt}
+    
+def get16DayForecastZip(zipCode, countryID)
+    url = f"http://api.openweathermap.org/data/2.5/forecast/daily?zip={zipCode},{countryID}
+
 
